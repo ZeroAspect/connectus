@@ -80,3 +80,16 @@ app.post('/login', async(req, res)=>{
     }
 })
 
+app.get('/cadastro', async(req, res)=>{
+    const ip = await IPquery()
+    const user = await Users.findOne({
+        where: {
+            ip: ip['ip']
+        }
+    })
+    if(user === null){
+        res.render('cadastro')
+    } else {
+        res.redirect('/cadastro')
+    }
+})

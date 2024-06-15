@@ -1,1 +1,61 @@
-<h2>Cadastro</h2>
+<form action="/cadastro" method="post" class="container">
+    {{{validation}}}
+    <div class="mb-3">
+        <label for="inputName">
+            Nome <strong class="text-danger">*</strong>
+        </label>
+        <input type="text" name="nome" class="form-control" id="inputName" placeholder="Nome...">
+    </div>
+    <div class="mb-3">
+        <label for="inputEmail">
+            Email <strong class="text-danger">*</strong>
+        </label>
+        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email..." aria-describedby="emailHelp">
+        <div id="emailHelp" class="text-small">Não compartilharemos seu Email com ninguém.</div>
+    </div>
+    <div class="mb-3">
+        <label for="inputSenha">
+            Senha <strong class="text-danger">*</strong>
+        </label>
+        <input type="password" name="senha" class="form-control" id="inputSenha" placeholder="Senha...">
+    </div>
+    <div class="mb-3">
+        <ul>
+            <li>
+                <label for="inputSexo">Sexualidade <strong class="text-danger">*</strong></label>
+                <ul>
+                    <li>
+                        <label for="inputMasculino">Masculino</label>
+                        <input type="radio" name="sexo" id="inputMasculino" class="form-check" value="Masculino">
+                    </li>
+                    <li>
+                        <label for="inputFeminino">Feminino</label>
+                        <input type="radio" name="sexo" id="inputFeminino" class="form-check" value="Feminino">
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="mb-3">
+        <label for="inputStatus">
+            Status
+        </label>
+        <select name="status" id="inputStatus" class="form-select">
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Indefinido">Indefinido</option>
+            <option value="Não Informado">Não Informado</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="textBio">
+            Biografia
+        </label>
+        <textarea name="bio" id="textBio" cols="30" rows="5" class="form-control">Olá mundo!</textarea>
+    </div>
+    <div class="mb-3 d-grid gap-2">
+        <button type="submit" class="btn btn-primary">
+            <i>Cadastrar</i>
+        </button>
+    </div>
+</form>

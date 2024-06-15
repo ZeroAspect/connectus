@@ -31,6 +31,10 @@ const Users = Sequelize.define("users", {
     ip: {
         type: sequelize.STRING,
         allowNull: false
+    },
+    bio: {
+        type: sequelize.STRING,
+        allowNull: false
     }
 })
 

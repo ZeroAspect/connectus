@@ -22,7 +22,7 @@ app.get("/", async(req, res)=>{
     const [ rows, results ] = await pool.query(`SELECT * FROM users`)
     const users = await Users.findOne({
         where: {
-            ip: ip['ip']
+            ip: ip['query']
         }
     })
     if(users === null){
@@ -31,7 +31,7 @@ app.get("/", async(req, res)=>{
         res.render('home')
     }
     // res.json(users)
-    console.log(ip['ip'])
+    console.log(ip['query'])
     
 })
 
@@ -71,7 +71,7 @@ app.post('/login', async(req, res)=>{
             UPDATE
             users
             SET
-            ip = '${ip['ip']}'
+            ip = '${ip['query']}'
             WHERE
             email = '${email}' and senha = '${senha}'
         `)
@@ -84,7 +84,7 @@ app.get('/cadastro', async(req, res)=>{
     const ip = await IPquery()
     const user = await Users.findOne({
         where: {
-            ip: ip['ip']
+            ip: ip['query']
         }
     })
     if(user === null){
@@ -123,7 +123,7 @@ app.post('/cadastro', async(req, res)=>{
             bio: bio,
             status: status,
             sexo: sexo,
-            ip: ip['ip']
+            ip: ip['query']
         })
         console.log(user)
         res.redirect('/success')
@@ -133,5 +133,19 @@ app.post('/cadastro', async(req, res)=>{
 
 app.get('/success', async(req, res)=>{
     res.render('success')
+})
+
+app.get('/new', async(req, res)=>{
+    const ip = await IPquery()
+    const user = await Users.findOne({
+        where: {
+            ip: ip['query']
+        }
+    })
+    if(user === null){
+        res.redirect('/login')
+    } else {
+        res.render('new')
+    }
 })
 

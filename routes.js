@@ -90,6 +90,48 @@ app.get('/cadastro', async(req, res)=>{
     if(user === null){
         res.render('cadastro')
     } else {
-        res.redirect('/cadastro')
+        res.redirect('/')
     }
 })
+
+app.post('/cadastro', async(req, res)=>{
+    const ip = await IPquery()
+    const { nome, email, senha, bio, status, sexo } = await req.body
+    console.log(req.body)
+    const user = await Users.findOne({
+        where: {
+            email: email
+        }
+    })
+    if(user!== null){
+        const validation = `
+        <div class='alert alert-danger' role='alert'>
+            <h4>Olá, pessoa</h4>
+            <p>Email já está em uso, informe outro email válido!</p>
+            <hr>
+            <p class='mb-0'>Nunca iremos compartilhar seu email ou senha com ninguém.</div>
+            </div>`
+        res.render('cadastro', {
+            validation
+        })
+        console.log(user)
+    } else {
+        const user = await Users.create({
+            nome: nome,
+            email: email,
+            senha: senha,
+            bio: bio,
+            status: status,
+            sexo: sexo,
+            ip: ip['ip']
+        })
+        console.log(user)
+        res.redirect('/success')
+    }
+    
+})
+
+app.get('/success', async(req, res)=>{
+    res.render('success')
+})
+

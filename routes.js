@@ -7,6 +7,7 @@ const IPquery = require("./ip/ip.js")
 const Sequelize = require("./sequelize/sequelize.js")
 const Users = require("./models/UsersRepository.js")
 const app = require("./app/config.js")
+const Posts = require("./models/PostsRepository.js")
 
 // body parser
 app.use(express.json())
@@ -149,3 +150,31 @@ app.get('/new', async(req, res)=>{
     }
 })
 
+app.post('/new', async(req, res)=>{
+    const ip = await IPquery()
+    const { title, content, fonte } = req.body
+    const user = await Users.findOne({
+        where: {
+            ip: ip['query']
+        }
+    })
+    console.log('user')
+    if(user === null){
+        res.redirect('/login')
+    } else {
+        const post = await Posts.create({
+            nome: user['nome'],
+            titulo: title,
+            conteudo: content,
+            fonte: fonte
+
+        })
+        console.log(user)
+        res.redirect('/new/success')
+        console.log(post)
+    }
+})
+
+app.get('/new/success', async(req, res)=>{
+    res.render('new/success')
+})

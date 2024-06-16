@@ -1,5 +1,5 @@
 async function IPquery(){
-    const ip = await fetch("https://api.ipify.org?format=json")
+    const ip = await fetch("http://ip-api.com/json/")
     const json = await ip.json()
     return json
 }

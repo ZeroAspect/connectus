@@ -1,0 +1,40 @@
+<div class="container">
+    <div>
+        <h3>
+            Conteúdos
+        </h3>
+        <small>
+            <a href="/{{nome}}">{{nome}}</a>
+        </small>
+    </div>
+    <hr>
+    <div class="container mb-3">
+        <ul class="nav justify-content-between nav-tabs">
+            <li class="nav-item">
+                <a href="/{{nome}}/conteudos" class="nav-link active">Conteúdos</a>
+            </li>
+            <li class="nav-item">
+                <a href="/{{nome}}" class="nav-link">Visão geral</a>
+            </li>
+            <li class="nav-item">
+                <a href="/{{nome}}/comentarios" class="nav-link">Comentarios</a>
+            </li>
+        </ul>
+    </div>
+    <div class="container">
+        {{#each rows}}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <a href="/{{nome}}">{{nome}}</a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{titulo}}</h5>
+                    <small class="card-text">
+                        {{{conteudo}}}
+                    </small>
+                    <a href="/{{nome}}/{{tiutlo}}" class="card-link">Ir para página</a>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

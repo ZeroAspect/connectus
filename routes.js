@@ -8,6 +8,7 @@ const Sequelize = require("./sequelize/sequelize.js")
 const Users = require("./models/UsersRepository.js")
 const app = require("./app/config.js")
 const Posts = require("./models/PostsRepository.js")
+const { marked } = require("marked")
 
 // body parser
 app.use(express.json())
@@ -165,7 +166,7 @@ app.post('/new', async(req, res)=>{
         const post = await Posts.create({
             nome: user['nome'],
             titulo: title,
-            conteudo: content,
+            conteudo: marked(content),
             fonte: fonte
 
         })
@@ -177,4 +178,27 @@ app.post('/new', async(req, res)=>{
 
 app.get('/new/success', async(req, res)=>{
     res.render('new/success')
+})
+
+app.get('/:nome/conteudos', async(req, res)=>{
+    const ip = await IPquery()
+    const user = await Users.findOne({
+        where: {
+            ip: ip['query']
+        }
+    })
+    if(user === null){
+        res.redirect('/login')
+    } else {
+        const [ rows, results ] = await pool.query(`SELECT * FROM posts WHERE nome = '${req.params.nome}'`)
+        const posts = await Posts.findAll({
+            where: {
+                nome: req.params.nome
+            }
+        })
+        res.render('profile/contents', {
+            rows,
+            nome: req.params.nome
+        })
+    }
 })

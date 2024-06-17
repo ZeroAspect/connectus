@@ -1,0 +1,47 @@
+<div class="container">
+    <h4>
+        Editar perfil
+    </h4>
+    {{#each rows}}
+        <div class="container">
+        <form action="/settings" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome <strong class="text-danger">*</strong></label>
+                <input type="text" class="form-control" name="nome" id="name" value="{{nome}}" readonly>
+            </div> 
+            <div class="mb-3">
+                <label for="email" class="form-label">Email <strong class="text-danger">*</strong></label>
+                <input type="email" class="form-control" id="email" name="email" value="{{email}}">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha <strong class="text-danger">*</strong></label>
+                <input type="password" class="form-control" name="senha" id="password" value="{{senha}}">
+                <input type="checkbox" id="viewPass" name="viewPass">
+                <label for="viewPass">Mostrar senha</label>
+            </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">Biografia</label>
+                <textarea type="text" class="form-control" cols="30" rows="5" name="bio" id="bio">{{{bio}}}</textarea>
+            </div>
+            <div class="mb-3 d-grid gap-2">
+                <button type="submit" class="btn btn-success"><i>Atualizar</i></button>
+            </div>
+        </form>
+    {{/each}}
+</div>
+
+<script>
+    "use stric"
+
+
+    var viewPass = document.getElementById("viewPass");
+    var pass = document.getElementById("password");
+
+    viewPass.addEventListener("change", function(){
+        if(pass.type == "password"){
+            pass.type = "text";
+        }else{
+            pass.type = "password";
+        }
+    })
+</script>

@@ -1,0 +1,35 @@
+<div class="container">
+    {{#each rows}}
+        <h3 class="mb-2">
+            {{nome}}
+        </h3>
+        <ul class="nav justify-content-between nav-tabs mb-3">
+            <li class="nav-item">
+                <a href="/{{nome}}/conteudos" class="nav-link">Conteúdos</a>
+            </li>
+            <li class="nav-item">
+                <a href="/{{nome}}" class="nav-link active">Visão geral</a>
+            </li>
+            <li class="nav-item">
+                <a href="/{{nome}}/comentarios" class="nav-link">Comentarios</a>
+            </li>
+        </ul>
+        <p class="mb-3">
+            <strong>Status</strong> {{status}} <br>
+            <strong>Sexualidade</strong> {{sexo}} <br>
+            <strong>Membro desde</strong> {{createdAt}}
+        </p>
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    Biografia
+                </div>
+                <div class="card-body">
+                    <div class="card-text">
+                        {{{bio}}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>

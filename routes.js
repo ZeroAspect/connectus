@@ -9,6 +9,7 @@ const Users = require("./models/UsersRepository.js")
 const app = require("./app/config.js")
 const Posts = require("./models/PostsRepository.js")
 const { marked } = require("marked")
+const Comentarios = require("./models/CommentsRepository.js")
 
 // body parser
 app.use(express.json())
@@ -30,7 +31,16 @@ app.get("/", async(req, res)=>{
     if(users === null){
         res.redirect('/login')
     } else {
-        res.render('home')
+        const user = await Users.findOne({
+            where: {
+                ip: ip['query']
+            }
+        })
+        const [rows, results] = await pool.query(`SELECT * FROM posts ORDER BY id DESC`)
+        res.render('home', {
+            nome: user['nome'],
+            posts: rows
+        })
     }
     // res.json(users)
     console.log(ip['query'])
@@ -102,6 +112,7 @@ app.post('/cadastro', async(req, res)=>{
     console.log(req.body)
     const user = await Users.findOne({
         where: {
+            nome: nome,
             email: email
         }
     })
@@ -109,7 +120,7 @@ app.post('/cadastro', async(req, res)=>{
         const validation = `
         <div class='alert alert-danger' role='alert'>
             <h4>Olá, pessoa</h4>
-            <p>Email já está em uso, informe outro email válido!</p>
+            <p>Email ou nome já está em uso, informe outro email ou senha válido!</p>
             <hr>
             <p class='mb-0'>Nunca iremos compartilhar seu email ou senha com ninguém.</div>
             </div>`
@@ -122,7 +133,7 @@ app.post('/cadastro', async(req, res)=>{
             nome: nome,
             email: email,
             senha: senha,
-            bio: bio,
+            bio: marked(bio),
             status: status,
             sexo: sexo,
             ip: ip['query']
@@ -147,7 +158,7 @@ app.get('/new', async(req, res)=>{
     if(user === null){
         res.redirect('/login')
     } else {
-        res.render('new')
+        res.render('new', { nome: user['nome'] })
     }
 })
 
@@ -196,9 +207,128 @@ app.get('/:nome/conteudos', async(req, res)=>{
                 nome: req.params.nome
             }
         })
+        console.log(rows)
         res.render('profile/contents', {
             rows,
             nome: req.params.nome
         })
+    }
+})
+
+app.get('/settings', async(req, res)=>{
+    const ip = await IPquery()
+    const user = await Users.findOne({
+        where: {
+            ip: ip['query']
+        }
+    })
+    console.log(user)
+    if(user === null){
+        res.redirect('/login')
+    } else {
+        const [ rows, results ] = await pool.query(`SELECT * FROM users WHERE nome = '${user['nome']}'`)
+        
+        res.render('profile/editProfile', {
+            rows
+        })
+    }
+})
+
+app.post('/settings', async(req, res)=>{
+    const ip = await IPquery()
+    const user = await Users.findOne({
+        where: {
+            ip: ip['query']
+        }
+    })
+    console.log(user)
+    if(user === null){
+        res.redirect('/login')
+    } else {
+        const { nome, email, senha, bio } = req.body
+        const update = await Users.update({
+            nome: nome,
+            email: email,
+            senha: senha,
+            bio: marked(bio)
+        },
+        {
+            where: {
+                nome: user['nome']
+            }
+        })
+        console.log(update)
+        res.redirect('/settings')
+    }
+})
+
+app.get("/:nome", async(req, res)=>{
+    const ip = await IPquery()
+    const user = await Users.findOne({
+        where: {
+            ip: ip['query']
+        }
+    })
+    if(user === null){
+        res.redirect('/login')
+    } else {
+        const [ rows, results ] = await pool.query(`SELECT * FROM users WHERE nome = '${req.params.nome}'`)
+        res.render('profile/profile', {
+            rows,
+            nome: req.params.nome
+        })
+    }
+})
+
+app.get('/:nome/:titulo', async(req, res)=>{
+    const ip = await IPquery()
+    const user = await Users.findOne({
+        where: {
+            ip: ip['query']
+        }
+    })
+    if(user === null){
+        res.redirect('/login')
+    } else {
+        const [ rows, results ] = await pool.query(`SELECT * FROM posts WHERE titulo = '${req.params.titulo}'`)
+        const post_id = rows[0]['id']
+        console.log(rows[0]['id'])
+        // const comment = await Comentarios.findAll({
+        //     where: {
+        //         post_id: 
+        //     }
+        // })
+        const [ comentarios, result ] = await pool.query(`SELECT * FROM comentarios WHERE post_id = ${post_id}`)
+        res.render('post/post', {
+            rows,
+            nome: req.params.nome,
+            titulo: req.params.titulo,
+            comentarios
+        })
+    }
+})
+
+app.post('/:nome/:titulo', async(req, res)=>{
+    const ip = await IPquery()
+    const user = await Users.findOne({
+        where: {
+            ip: ip['query']
+        }
+    })
+    if(user === null){
+        res.redirect('/login')
+    } else {
+        const { comentario } = req.body
+        const post = await Posts.findOne({
+            where: {
+                titulo: req.params.titulo
+            }
+        })
+        const comment = await Comentarios.create({
+            nome: user['nome'],
+            comentario: marked(comentario),
+            post_id: post['id']
+        })
+        res.redirect(`/${req.params.nome}/${req.params.titulo}`)
     }
 })

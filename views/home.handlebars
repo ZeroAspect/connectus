@@ -1,1 +1,17 @@
-<h1>home</h1>
+<div class="container">
+    {{#each posts}}
+        <div class="card mb-3">
+            <div class="card-header">
+                <a href="/{{nome}}">{{nome}}</a>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{id}}. {{titulo}}</h5>
+                <p class="card-text">{{{conteudo}}}</p>
+                <a href="/{{nome}}/{{titulo}}" class="card-link">Leia mais</a>
+                <small>
+                    <span class="text-muted">{{createdAt}}</span>
+                </small>
+            </div>
+        </div>
+    {{/each}}
+</div>

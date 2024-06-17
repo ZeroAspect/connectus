@@ -1,0 +1,50 @@
+<div class="container">
+    {{#each rows}}
+        <div class="card mb-3">
+            <div class="card-header">
+                <a href="/{{nome}}">{{nome}}</a>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">
+                    {{titulo}}
+                </h4>
+                <div class="card-text">
+                    {{{conteudo}}}
+                </div>
+                
+                <li><a href="{{fonte}}" class="card-link">{{fonte}}</a></li>
+
+                <div class="card-text">
+                    <small class="text-muted">{{createdAt}}</small>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+    <div class="container mb-3">
+        <form action="/{{nome}}/{{titulo}}" method="post">
+            <div class="mb-3">
+                <label for="comentario">Comentario <strong class="text-danger">*</strong></label>
+                <textarea class="form-control" id="comentario" name="comentario" cols="10" rows="5"></textarea>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">Enviar</button>
+            </div>
+        </form>
+    </div>
+    {{#each comentarios}}
+        <div class="card mb-3">
+            <div class="card-header">
+                <a href="/{{nome}}">{{nome}}</a>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">
+                    {{titulo}}
+                </h4>
+                <div class="card-text">
+                    {{{comentario}}}
+                    <small class="text-muted">{{createdAt}}</small>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>
